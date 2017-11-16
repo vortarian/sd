@@ -1,0 +1,45 @@
+version: "3.3"
+services:
+  consul:
+    image: "consul:1.0.0"
+    environment:
+      CONSUL_ALLOW_PRIVILEGED_PORTS: ""
+    ports:
+    - 8300
+    - 8301
+    - 8500:8500
+  registrator:
+    depends_on:
+      - consul
+    links:
+      - consul
+    image: "local/service-discovery/registrator:1.0.0"
+    environment:
+      SPOON: emptyValue
+    volumes:
+    - /var/run/docker.sock:/tmp/docker.sock
+    command:
+    - "-resync=600"
+    - "-retry-attempts=-1"
+    - "-retry-interval=30000"
+    - "-ttl=1200"
+    - "-ttl-refresh=300"
+    - "consul://consul:8500/"
+  haproxy:
+    depends_on:
+      - consul
+    links:
+      - consul
+    image: "844537130703.dkr.ecr.us-west-2.amazonaws.com/dev/haproxy:1.0.0"
+    environment:
+      SERVICE_1936_TAGS: "rest"
+      SERVICE_80_TAGS: "rest"
+    command:
+    - "-consul-addr=consul:8500"
+    - "-log-level=debug"
+    ports:
+    - "8080:80"
+    - "8936:1936"
+volumes:
+  log:
+

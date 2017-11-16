@@ -1,0 +1,8 @@
+
+*.tgz
+*.tar.gz
+*.gz
+*.zip
+*.bz
+
+.idea

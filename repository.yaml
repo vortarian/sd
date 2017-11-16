@@ -1,0 +1,13 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+Parameters:
+  Environment:
+    Type: String
+Resources:
+  parkHaproxy:
+    Type: "AWS::ECR::Repository"
+    Properties:
+      RepositoryName: !Join ['', [!Ref 'Environment', "/", "park-haproxy"]]
+Outputs:
+  parkHaproxy:
+    Value: !Join ['', [ !Ref 'AWS::AccountId', '.dkr.ecr.', !Ref 'AWS::Region', '.amazonaws.com/', !Ref 'parkHaproxy']]
