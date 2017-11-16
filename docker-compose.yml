@@ -13,7 +13,7 @@ services:
       - consul
     links:
       - consul
-    image: "local/service-discovery/registrator:1.0.0"
+    image: "gliderlabs/registrator:latest"
     environment:
       SPOON: emptyValue
     volumes:
